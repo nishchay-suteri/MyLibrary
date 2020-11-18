@@ -6,6 +6,7 @@ const app = express();
 
 const GLOBALS = require("./constants/globals");
 const indexRouter = require("./routes/index");
+const authorRouter = require("./routes/authors");
 const mongoose = require("mongoose");
 
 app.set("view engine", "ejs");
@@ -19,7 +20,10 @@ mongoose.set("useFindAndModify", false);
 
 app.use(express.static(path.join(__dirname, "../public"))); // To serve static contents
 app.use(expressLayouts);
-app.use(indexRouter);
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+app.use("/", indexRouter);
+app.use("/authors", authorRouter);
 
 mongoose.connect(GLOBALS.DB_URI, () => {
     console.log("Connected to DB");
